@@ -1,0 +1,8 @@
+{{- define "data-disk-script" -}}
+- path: /var/lib/data-disk/run.sh
+  permissions: 0755
+  content:
+    inline:
+      encoding: b64
+      data: "IyEvYmluL3NoCkxBQkVMPWRhdGFkaXNrCmlmICEgYmxraWQgLS1sYWJlbCAkTEFCRUwgPiAvZGV2L251bGwgOyB0aGVuCiAgICBUQVJHRVRfRElTSz0kKGxzYmxrIC1kc25QIC1vIE5BTUUsUEFSVFRZUEUsRlNUWVBFIHwgZ3JlcCAnUEFSVFRZUEU9IiInIHwgZ3JlcCAnRlNUWVBFPSIiJyB8IGhlYWQgLW4xIHwgY3V0IC1mMiAtZFwiKQogICAgbWtmcy54ZnMgLUwgJExBQkVMICAvZGV2LyRUQVJHRVRfRElTSyAgIApmaQo="
+{{- end -}}
