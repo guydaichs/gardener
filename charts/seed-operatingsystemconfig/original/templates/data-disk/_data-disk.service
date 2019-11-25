@@ -17,6 +17,7 @@
     Description=Mount Data disk to /var/lib/kubelet/pods
     Requires=data-disk.service
     After=data-disk.service
+    Before=kubelet.service
     [Mount]
     What=/dev/disk/by-label/datadisk
     Where=/var/lib/kubelet/pods
