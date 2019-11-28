@@ -10,19 +10,48 @@
     Type=oneshot
     RemainAfterExit=true
     ExecStart=/var/lib/data-disk/run.sh
+- name: var-lib-data.mount
+  command: start
+  content: |
+    [Unit]
+    Description=Mount Data disk to /var/lib/data
+    Requires=data-disk.service
+    After=data-disk.service
+    [Mount]
+    What=/dev/disk/by-label/datadisk
+    Where=/var/lib/data
+    Type=xfs
+    Options=defaults
+    [Install]
+    WantedBy=local-fs.target
+- name: var-lib-docker.mount
+  command: start
+  content: |
+    [Unit]
+    Description=Mount /var/lib/docker to /var/lib/data/docker
+    Requires=var-lib-data.mount
+    After=var-lib-data.mount
+    Before=multi-user.target
+    [Mount]
+    What=/var/lib/data/docker
+    Where=/var/lib/docker
+    Options=bind
+    Type=none
+    [Install]
+    WantedBy=local-fs.target
 - name: var-lib-kubelet-pods.mount
   command: start
   content: |
     [Unit]
-    Description=Mount Data disk to /var/lib/kubelet/pods
-    Requires=data-disk.service
-    After=data-disk.service
-    Before=kubelet.service
+    Description=Mount /var/lib/kubelet/pods to /var/lib/data/pods
+    Requires=var-lib-data.mount
+    After=var-lib-data.mount
+    Before=multi-user.target
     [Mount]
-    What=/dev/disk/by-label/datadisk
+    What=/var/lib/data/pods
     Where=/var/lib/kubelet/pods
-    Type=xfs
-    Options=defaults
+    Options=bind
+    Type=none
     [Install]
-    WantedBy=multi-user.target
+    WantedBy=local-fs.target
 {{- end}}
