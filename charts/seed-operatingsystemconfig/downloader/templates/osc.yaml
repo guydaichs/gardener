@@ -15,6 +15,32 @@ spec:
   type: {{ required "type is required" .Values.type }}
   purpose: {{ required "purpose is required" .Values.purpose }}
   units:
+  - name: data-disk.service
+    enable: true
+    content: |
+      [Unit]
+      Description=Format Data Disk
+      Before=local-fs-pre.target
+      [Service]
+      Type=oneshot
+      RemainAfterExit=true
+      ExecStart=/var/lib/data-disk/run.sh
+  - name: var-lib.mount
+    enable: true
+    command: start
+    content: |
+      [Unit]
+      Description=Mount Data disk to /var/lib
+      Requires=data-disk.service
+      After=data-disk.service
+      Before=kubelet.service
+      [Mount]
+      What=/dev/disk/by-label/datadisk
+      Where=/var/lib
+      Type=xfs
+      Options=defaults
+      [Install]
+      WantedBy=local-fs.target
   - name: cloud-config-downloader.service
     command: start
     enable: true
@@ -29,6 +55,12 @@ spec:
       EnvironmentFile=/etc/environment
       ExecStart=/var/lib/cloud-config-downloader/download-cloud-config.sh
   files:
+  - path: /var/lib/data-disk/run.sh
+    permissions: 0744
+    content:
+      inline:
+        encoding: b64
+        data: "IyEvYmluL3NoCkxBQkVMPWRhdGFkaXNrCmlmICEgYmxraWQgLS1sYWJlbCAkTEFCRUwgPiAvZGV2L251bGwgOyB0aGVuCiAgICBUQVJHRVRfRElTSz0kKGxzYmxrIC1kc25QIC1vIE5BTUUsUEFSVFRZUEUsRlNUWVBFIHwgZ3JlcCAnUEFSVFRZUEU9IiInIHwgZ3JlcCAnRlNUWVBFPSIiJyB8IGhlYWQgLW4xIHwgY3V0IC1mMiAtZFwiKQogICAgbWtmcy54ZnMgLUwgJExBQkVMICAvZGV2LyRUQVJHRVRfRElTSyAgIAogICAgbWtkaXIgL3RtcC9tIAogICAgbW91bnQgTEFCRUw9JExBQkVMIC90bXAvbQogICAgY3AgLWEgL3Zhci9saWIvKiAvdG1wL20vCiAgICB1bW91bnQgL3RtcC9tCmZpCg=="
   - path: /var/lib/cloud-config-downloader/credentials/server
     permissions: 0644
     content:

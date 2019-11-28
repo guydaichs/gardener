@@ -22,7 +22,6 @@ spec:
 {{ include "kubelet-monitor" . | indent 2 }}
 {{ include "update-ca-certs" . | indent 2 }}
 {{ include "systemd-sysctl" . | indent 2 }}
-{{ include "data-disk" . | indent 2 }}
   files:
 {{ include "docker-logrotate-config" . | indent 2 }}
 {{ include "journald-config" . | indent 2 }}
@@ -30,4 +29,3 @@ spec:
 {{ include "root-certs" . | indent 2 }}
 {{ include "kernel-config" . | indent 2 }}
 {{ include "health-monitor" . | indent 2 }}
-{{ include "data-disk-script" . | indent 2 }}
