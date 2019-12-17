@@ -1,0 +1,14 @@
+{{- define "var-lib-mount" -}}
+- name: var-lib.mount
+  content: |
+    [Unit]
+    Description=Mount Data disk to /var/lib
+    Before=kubelet.service
+    [Mount]
+    What=/dev/disk/by-label/datadisk
+    Where=/var/lib
+    Type=xfs
+    Options=defaults
+    [Install]
+    WantedBy=local-fs.target
+{{- end -}}

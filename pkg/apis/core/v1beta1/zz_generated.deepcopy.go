@@ -3092,6 +3092,13 @@ func (in *Worker) DeepCopyInto(out *Worker) {
 		*out = new(Volume)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.DataVolumes != nil {
+		in, out := &in.DataVolumes, &out.DataVolumes
+		*out = make([]Volume, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
 	if in.Zones != nil {
 		in, out := &in.Zones, &out.Zones
 		*out = make([]string, len(*in))

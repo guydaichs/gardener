@@ -164,5 +164,5 @@ test-clean:
 .PHONY: generate
 generate:
 	@./hack/generate-code
-	@./hack/generate-examples
-	@./hack/generate-reference-doc
+	#@./hack/generate-examples
+	#@./hack/generate-reference-doc
