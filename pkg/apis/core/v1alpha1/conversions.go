@@ -1781,6 +1781,14 @@ func Convert_garden_ShootStatus_To_v1alpha1_ShootStatus(in *garden.ShootStatus, 
 	return nil
 }
 
+func Convert_v1alpha1_Volume_To_garden_Volume(*Volume, *garden.Volume, conversion.Scope) error {
+	return nil
+}
+
+func Convert_v1alpha1_Worker_To_garden_Worker(*Worker, *garden.Worker, conversion.Scope) error {
+	return nil
+}
+
 func Convert_v1alpha1_ShootStatus_To_garden_ShootStatus(in *ShootStatus, out *garden.ShootStatus, s conversion.Scope) error {
 	if err := autoConvert_v1alpha1_ShootStatus_To_garden_ShootStatus(in, out, s); err != nil {
 		return err

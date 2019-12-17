@@ -26,7 +26,7 @@ if ! which jq >/dev/null; then
 fi
 
 EXTENSIONS_FILE="$(curl -s https://raw.githubusercontent.com/gardener/gardener-extensions/master/extensions.yaml)"
-extensions="$(echo "$EXTENSIONS_FILE" | yaml2json | jq -r '.extensions')"
+extensions="$(echo "$EXTENSIONS_FILE" | yaml2json - | jq -r '.extensions')"
 location="$(pwd)"
 
 function end_execution() {

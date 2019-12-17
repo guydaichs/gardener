@@ -63,6 +63,18 @@ func (b *Botanist) DeployWorker(ctx context.Context) error {
 			}
 		}
 
+		var dataVolumes = make([]extensionsv1alpha1.Volume, 0)
+		if len(worker.DataVolumes) > 0 {
+			for _, dataVolume := range worker.DataVolumes {
+				dataVolumes = append(dataVolumes, extensionsv1alpha1.Volume{
+					Name:      dataVolume.Name,
+					Type:      dataVolume.Type,
+					Size:      dataVolume.Size,
+					Encrypted: dataVolume.Encrypted,
+				})
+			}
+		}
+
 		var pConfig *runtime.RawExtension
 		if worker.ProviderConfig != nil {
 			pConfig = &runtime.RawExtension{
@@ -84,10 +96,12 @@ func (b *Botanist) DeployWorker(ctx context.Context) error {
 				Name:    worker.Machine.Image.Name,
 				Version: worker.Machine.Image.Version,
 			},
-			ProviderConfig: pConfig,
-			UserData:       []byte(b.Shoot.OperatingSystemConfigsMap[worker.Name].Downloader.Data.Content),
-			Volume:         volume,
-			Zones:          worker.Zones,
+			ProviderConfig:        pConfig,
+			UserData:              []byte(b.Shoot.OperatingSystemConfigsMap[worker.Name].Downloader.Data.Content),
+			Volume:                volume,
+			DataVolumes:           dataVolumes,
+			KubeletDataVolumeName: worker.KubeletDataVolumeName,
+			Zones:                 worker.Zones,
 		})
 	}
 
