@@ -7,7 +7,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-     http://www.apache.org/licenses/LICENSE-2.0
+    http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
@@ -5412,6 +5412,13 @@ func schema_pkg_apis_core_v1alpha1_Volume(ref common.ReferenceCallback) common.O
 				Description: "Volume contains information about the volume type and size.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the device to make it referencable",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Type is the machine type of the worker group.",
@@ -5423,6 +5430,13 @@ func schema_pkg_apis_core_v1alpha1_Volume(ref common.ReferenceCallback) common.O
 						SchemaProps: spec.SchemaProps{
 							Description: "Size is the size of the root volume.",
 							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"encrypted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Encrypted controls wether the device will be iaas-encrypted, not supported for root devices",
+							Type:        []string{"boolean"},
 							Format:      "",
 						},
 					},
@@ -5580,6 +5594,26 @@ func schema_pkg_apis_core_v1alpha1_Worker(ref common.ReferenceCallback) common.O
 						SchemaProps: spec.SchemaProps{
 							Description: "Volume contains information about the volume type and size.",
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.Volume"),
+						},
+					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"zones": {
@@ -10163,6 +10197,13 @@ func schema_pkg_apis_core_v1beta1_Volume(ref common.ReferenceCallback) common.Op
 				Description: "Volume contains information about the volume type and size.",
 				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the device to make it referencable",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"type": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Type is the machine type of the worker group.",
@@ -10174,6 +10215,13 @@ func schema_pkg_apis_core_v1beta1_Volume(ref common.ReferenceCallback) common.Op
 						SchemaProps: spec.SchemaProps{
 							Description: "Size is the size of the root volume.",
 							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"encrypted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Encrypted controls wether the device will be iaas-encrypted, not supported for root devices",
+							Type:        []string{"boolean"},
 							Format:      "",
 						},
 					},
@@ -10331,6 +10379,26 @@ func schema_pkg_apis_core_v1beta1_Worker(ref common.ReferenceCallback) common.Op
 						SchemaProps: spec.SchemaProps{
 							Description: "Volume contains information about the volume type and size.",
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.Volume"),
+						},
+					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
 						},
 					},
 					"zones": {
