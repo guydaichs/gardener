@@ -4932,6 +4932,8 @@ func autoConvert_garden_Worker_To_v1beta1_Worker(in *garden.Worker, out *Worker,
 	// WARNING: in.ProviderConfig requires manual conversion: does not exist in peer-type
 	out.Taints = *(*[]v1.Taint)(unsafe.Pointer(&in.Taints))
 	// WARNING: in.Volume requires manual conversion: does not exist in peer-type
+	// WARNING: in.DataVolumes requires manual conversion: does not exist in peer-type
+	// WARNING: in.KubeletDataVolumeName requires manual conversion: does not exist in peer-type
 	// WARNING: in.Zones requires manual conversion: does not exist in peer-type
 	return nil
 }

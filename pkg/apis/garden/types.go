@@ -1679,6 +1679,10 @@ type Worker struct {
 	Taints []corev1.Taint
 	// Volume contains information about the volume type and size.
 	Volume *Volume
+	// DataVolumes contains a list of required additional disks to be attached to the vm
+	DataVolumes []Volume
+	// KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume
+	KubeletDataVolumeName string
 	// Zones is a list of availability zones that are used to evenly distribute this worker pool. Optional
 	// as not every provider may support availability zones.
 	Zones []string
@@ -1726,10 +1730,14 @@ type ShootMachineImage struct {
 
 // Volume contains information about the volume type and size.
 type Volume struct {
+	// Name of the device to make it referencable
+	Name *string
 	// Type is the machine type of the worker group.
 	Type *string
 	// Size is the size of the root volume.
 	Size string
+	// Encrypted controls wether the device will be iaas-encrypted, not supported for root devices
+	Encrypted bool
 }
 
 ////////////////////////
