@@ -1212,6 +1212,16 @@ func RegisterConversions(s *runtime.Scheme) error {
 	}); err != nil {
 		return err
 	}
+	if err := s.AddConversionFunc((*Volume)(nil), (*garden.Volume)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1beta1_Volume_To_garden_Volume(a.(*Volume), b.(*garden.Volume), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddConversionFunc((*Worker)(nil), (*garden.Worker)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1beta1_Worker_To_garden_Worker(a.(*Worker), b.(*garden.Worker), scope)
+	}); err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -4100,16 +4110,18 @@ func autoConvert_garden_ShootStatus_To_v1beta1_ShootStatus(in *garden.ShootStatu
 }
 
 func autoConvert_v1beta1_Volume_To_garden_Volume(in *Volume, out *garden.Volume, s conversion.Scope) error {
-	// WARNING: in.Name requires manual conversion: does not exist in peer-type
+	out.Name = (*string)(unsafe.Pointer(in.Name))
 	out.Type = (*string)(unsafe.Pointer(in.Type))
 	out.Size = in.Size
-	// WARNING: in.Encrypted requires manual conversion: does not exist in peer-type
+	out.Encrypted = in.Encrypted
 	return nil
 }
 
 func autoConvert_garden_Volume_To_v1beta1_Volume(in *garden.Volume, out *Volume, s conversion.Scope) error {
+	out.Name = (*string)(unsafe.Pointer(in.Name))
 	out.Type = (*string)(unsafe.Pointer(in.Type))
 	out.Size = in.Size
+	out.Encrypted = in.Encrypted
 	return nil
 }
 
@@ -4174,8 +4186,18 @@ func autoConvert_v1beta1_Worker_To_garden_Worker(in *Worker, out *garden.Worker,
 	} else {
 		out.Volume = nil
 	}
-	// WARNING: in.DataVolumes requires manual conversion: does not exist in peer-type
-	// WARNING: in.KubeletDataVolumeName requires manual conversion: does not exist in peer-type
+	if in.DataVolumes != nil {
+		in, out := &in.DataVolumes, &out.DataVolumes
+		*out = make([]garden.Volume, len(*in))
+		for i := range *in {
+			if err := Convert_v1beta1_Volume_To_garden_Volume(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.DataVolumes = nil
+	}
+	out.KubeletDataVolumeName = in.KubeletDataVolumeName
 	out.Zones = *(*[]string)(unsafe.Pointer(&in.Zones))
 	return nil
 }
@@ -4212,6 +4234,18 @@ func autoConvert_garden_Worker_To_v1beta1_Worker(in *garden.Worker, out *Worker,
 	} else {
 		out.Volume = nil
 	}
+	if in.DataVolumes != nil {
+		in, out := &in.DataVolumes, &out.DataVolumes
+		*out = make([]Volume, len(*in))
+		for i := range *in {
+			if err := Convert_garden_Volume_To_v1beta1_Volume(&(*in)[i], &(*out)[i], s); err != nil {
+				return err
+			}
+		}
+	} else {
+		out.DataVolumes = nil
+	}
+	out.KubeletDataVolumeName = in.KubeletDataVolumeName
 	out.Zones = *(*[]string)(unsafe.Pointer(&in.Zones))
 	return nil
 }
