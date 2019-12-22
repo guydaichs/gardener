@@ -377,6 +377,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootNetworks":                        schema_pkg_apis_garden_v1beta1_ShootNetworks(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootSpec":                            schema_pkg_apis_garden_v1beta1_ShootSpec(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootStatus":                          schema_pkg_apis_garden_v1beta1_ShootStatus(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume":                               schema_pkg_apis_garden_v1beta1_Volume(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.VolumeType":                           schema_pkg_apis_garden_v1beta1_VolumeType(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.Worker":                               schema_pkg_apis_garden_v1beta1_Worker(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.Zone":                                 schema_pkg_apis_garden_v1beta1_Zone(ref),
@@ -10866,6 +10867,26 @@ func schema_pkg_apis_garden_v1beta1_AWSWorker(ref common.ReferenceCallback) comm
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"volumeType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeType is the type of the root volumes.",
@@ -10885,7 +10906,7 @@ func schema_pkg_apis_garden_v1beta1_AWSWorker(ref common.ReferenceCallback) comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -11552,6 +11573,26 @@ func schema_pkg_apis_garden_v1beta1_AlicloudWorker(ref common.ReferenceCallback)
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"volumeType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeType is the type of the root volumes.",
@@ -11571,7 +11612,7 @@ func schema_pkg_apis_garden_v1beta1_AlicloudWorker(ref common.ReferenceCallback)
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -12117,6 +12158,26 @@ func schema_pkg_apis_garden_v1beta1_AzureWorker(ref common.ReferenceCallback) co
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"volumeType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeType is the type of the root volumes.",
@@ -12136,7 +12197,7 @@ func schema_pkg_apis_garden_v1beta1_AzureWorker(ref common.ReferenceCallback) co
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -13017,6 +13078,26 @@ func schema_pkg_apis_garden_v1beta1_GCPWorker(ref common.ReferenceCallback) comm
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"volumeType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeType is the type of the root volumes.",
@@ -13036,7 +13117,7 @@ func schema_pkg_apis_garden_v1beta1_GCPWorker(ref common.ReferenceCallback) comm
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -15222,12 +15303,32 @@ func schema_pkg_apis_garden_v1beta1_OpenStackWorker(ref common.ReferenceCallback
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"name", "machineType", "autoScalerMin", "autoScalerMax"},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -15568,6 +15669,26 @@ func schema_pkg_apis_garden_v1beta1_PacketWorker(ref common.ReferenceCallback) c
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"volumeType": {
 						SchemaProps: spec.SchemaProps{
 							Description: "VolumeType is the type of the root volumes.",
@@ -15587,7 +15708,7 @@ func schema_pkg_apis_garden_v1beta1_PacketWorker(ref common.ReferenceCallback) c
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 
@@ -16709,6 +16830,48 @@ func schema_pkg_apis_garden_v1beta1_ShootStatus(ref common.ReferenceCallback) co
 	}
 }
 
+func schema_pkg_apis_garden_v1beta1_Volume(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "Volume contains information about the volume type and size.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name of the device to make it referencable",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"type": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Type is the machine type of the worker group.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"size": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Size is the size of the root volume.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"encrypted": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Encrypted controls wether the device will be iaas-encrypted, not supported for root devices",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"size"},
+			},
+		},
+	}
+}
+
 func schema_pkg_apis_garden_v1beta1_VolumeType(ref common.ReferenceCallback) common.OpenAPIDefinition {
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
@@ -16853,12 +17016,32 @@ func schema_pkg_apis_garden_v1beta1_Worker(ref common.ReferenceCallback) common.
 							Format:      "",
 						},
 					},
+					"dataVolumes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DataVolumes contains a list of required additional disks to be attached to the vm",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume"),
+									},
+								},
+							},
+						},
+					},
+					"kubeletDataVolumeName": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 				},
 				Required: []string{"name", "machineType", "autoScalerMin", "autoScalerMax"},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeletConfig", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.ShootMachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Volume", "k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 

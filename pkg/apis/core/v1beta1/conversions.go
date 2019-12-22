@@ -1036,6 +1036,7 @@ func Convert_v1beta1_Shoot_To_garden_Shoot(in *Shoot, out *garden.Shoot, s conve
 			if err := autoConvert_v1beta1_Worker_To_garden_Worker(&worker, &o, s); err != nil {
 				return err
 			}
+			//klog.Errorf("AutoConvert Worker in: %+v, out %+v", worker, out)
 			out.Spec.Cloud.AWS.Workers = append(out.Spec.Cloud.AWS.Workers, o)
 		}
 
@@ -1719,6 +1720,7 @@ func Convert_v1beta1_Volume_To_garden_Volume(in *Volume, out *garden.Volume, s c
 }
 
 func Convert_v1beta1_Worker_To_garden_Worker(in *Worker, out *garden.Worker, s conversion.Scope) error {
+	// klog.Errorf("AutoConvert Worker in: %+v, out %+v", in, out)
 	return autoConvert_v1beta1_Worker_To_garden_Worker(in, out, s)
 }
 

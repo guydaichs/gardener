@@ -905,6 +905,21 @@ type Cloud struct {
 	Packet *PacketCloud `json:"packet,omitempty"`
 }
 
+// Volume contains information about the volume type and size.
+type Volume struct {
+	// Name of the device to make it referencable
+	// +optional
+	Name *string `json:"name,omitempty"`
+	// Type is the machine type of the worker group.
+	// +optional
+	Type *string `json:"type,omitempty"`
+	// Size is the size of the root volume.
+	Size string `json:"size"`
+	// Encrypted controls wether the device will be iaas-encrypted, not supported for root devices
+	// +optional
+	Encrypted bool `json:"encrypted,omitempty"`
+}
+
 // AWSCloud contains the Shoot specification for AWS.
 type AWSCloud struct {
 	// ShootMachineImage holds information about the machine image to use for all workers.
@@ -1235,6 +1250,12 @@ type Worker struct {
 	// CABundle is a certificate bundle which will be installed onto every machine of this worker pool.
 	// +optional
 	CABundle *string `json:"caBundle,omitempty"`
+	// DataVolumes contains a list of required additional disks to be attached to the vm
+	// +optional
+	DataVolumes []Volume `json:"dataVolumes,omitempty"`
+	// KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume
+	// +optional
+	KubeletDataVolumeName string `json:"kubeletDataVolumeName,omitempty"`
 }
 
 var (

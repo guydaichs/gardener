@@ -1697,6 +1697,10 @@ type WorkerMigrationData struct {
 	ProviderConfig *ProviderConfig
 	// Volume contains information about the volume type and size.
 	Volume *Volume
+	// DataVolumes contains a list of required additional disks to be attached to the vm
+	DataVolumes []Volume
+	// KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume
+	KubeletDataVolumeName string
 	// Zones is a list of availability zones that are used to evenly distribute this worker pool. Optional
 	// as not every provider may support availability zones.
 	Zones []string

@@ -73,7 +73,7 @@ func (b *Botanist) DeployWorker(ctx context.Context) error {
 				})
 			}
 		}
-
+		
 		var pConfig *runtime.RawExtension
 		if worker.ProviderConfig != nil {
 			pConfig = &runtime.RawExtension{

@@ -1479,6 +1479,15 @@ func Convert_v1beta1_Shoot_To_garden_Shoot(in *Shoot, out *garden.Shoot, s conve
 			}
 
 			if data, ok := workerMigrationInfo[worker.Name]; ok {
+				var dataVolumes []garden.Volume
+				for _, volume := range data.DataVolumes {
+					dataVolumes = append(dataVolumes, garden.Volume{Name: volume.Name,
+						Size: volume.Size,
+						Type: volume.Type,
+						Encrypted: volume.Encrypted})
+				}
+				w.DataVolumes = dataVolumes
+				w.KubeletDataVolumeName = data.KubeletDataVolumeName
 				w.ProviderConfig = data.ProviderConfig
 				w.Zones = data.Zones
 			}
@@ -1634,7 +1643,6 @@ func Convert_v1beta1_Shoot_To_garden_Shoot(in *Shoot, out *garden.Shoot, s conve
 					w.Zones = append(w.Zones, zone)
 				}
 			}
-
 			out.Spec.Provider.Workers = append(out.Spec.Provider.Workers, w)
 			workers = append(workers, w)
 		}
@@ -2253,6 +2261,8 @@ func Convert_garden_Shoot_To_v1beta1_Shoot(in *garden.Shoot, out *Shoot, s conve
 				ProviderConfig: worker.ProviderConfig,
 				Zones:          worker.Zones,
 				Volume:         worker.Volume,
+				DataVolumes: worker.DataVolumes,
+				KubeletDataVolumeName: worker.KubeletDataVolumeName,
 			}
 		}
 		data, err := json.Marshal(workerMigrationInfo)
