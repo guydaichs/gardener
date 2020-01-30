@@ -742,6 +742,27 @@ func ValidateWorker(worker core.Worker, fldPath *field.Path) field.ErrorList {
 		}
 	}
 
+	if worker.DataVolumes != nil {
+		volumeSizeRegex, _ := regexp.Compile(`^(\d)+Gi$`)
+		for _, volume := range worker.DataVolumes {
+			if !volumeSizeRegex.MatchString(volume.Size) {
+				allErrs = append(allErrs, field.Invalid(fldPath.Child("volume", "size"), worker.Volume.Size, fmt.Sprintf("volume size must match the regex %s", volumeSizeRegex)))
+			}
+		}
+	}
+
+	//if worker.KubeletDataVolumeName != "" {
+	//	found := false
+	//	for _, volume := range worker.DataVolumes {
+	//		if volume.Name == &worker.KubeletDataVolumeName {
+	//			found = true
+	//		}
+	//	}
+	//	if !found {
+	//		allErrs = append(allErrs, field.Invalid(fldPath.Child("KubeletDataVolumeName"), worker.KubeletDataVolumeName, fmt.Sprintf("KubeletDataVolumeName refers to unrecognized data volume %s", worker.KubeletDataVolumeName)))
+	//	}
+	//}
+
 	return allErrs
 }
 
