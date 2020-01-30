@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-REGISTRY                           := eu.gcr.io/gardener-project/gardener
+REGISTRY                           := docker.io/guydaich
 APISERVER_IMAGE_REPOSITORY         := $(REGISTRY)/apiserver
 CONROLLER_MANAGER_IMAGE_REPOSITORY := $(REGISTRY)/controller-manager
 SCHEDULER_IMAGE_REPOSITORY         := $(REGISTRY)/scheduler
@@ -164,5 +164,5 @@ test-clean:
 .PHONY: generate
 generate:
 	@./hack/generate-code
-	@./hack/generate-examples
-	@./hack/generate-reference-doc
+	#@./hack/generate-examples
+	#@./hack/generate-reference-doc
