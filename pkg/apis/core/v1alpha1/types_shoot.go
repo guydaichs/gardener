@@ -848,7 +848,7 @@ type Volume struct {
 	Type *string `json:"type,omitempty"`
 	// Size is the size of the root volume.
 	Size string `json:"size"`
-	// Encrypted controls wether the device will be iaas-encrypted, not supported for root devices
+	// Encrypted determines if the volume should be encrypted.
 	// +optional
 	Encrypted bool `json:"encrypted,omitempty"`
 }

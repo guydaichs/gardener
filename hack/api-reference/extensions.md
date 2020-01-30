@@ -2684,6 +2684,18 @@ string
 <tbody>
 <tr>
 <td>
+<code>name</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Name of the device to make it referencable</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>type</code></br>
 <em>
 string
@@ -2691,7 +2703,7 @@ string
 </td>
 <td>
 <em>(Optional)</em>
-<p>Type is the type of the volume.</p>
+<p>Type is the machine type of the worker group.</p>
 </td>
 </tr>
 <tr>
@@ -2702,7 +2714,19 @@ string
 </em>
 </td>
 <td>
-<p>Size is the size of the volume.</p>
+<p>Size is the size of the root volume.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>encrypted</code></br>
+<em>
+bool
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Encrypted controls wether the device will be iaas-encrypted, not supported for root devices</p>
 </td>
 </tr>
 </tbody>
@@ -2889,6 +2913,32 @@ Volume
 </tr>
 <tr>
 <td>
+<code>dataVolumes</code></br>
+<em>
+<a href="#extensions.gardener.cloud/v1alpha1.Volume">
+[]Volume
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>DataVolumes contains a list of required additional disks to be attached to the vm</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>kubeletDataVolumeName</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>KubeletDataVolumeName contains the name of the dataVolume to attach and mount as the kubelet data volume</p>
+</td>
+</tr>
+<tr>
+<td>
 <code>zones</code></br>
 <em>
 []string
@@ -3052,5 +3102,5 @@ the cluster-autoscaler properly.</p>
 <hr/>
 <p><em>
 Generated with <code>gen-crd-api-reference-docs</code>
-on git commit <code>5b69a02f5</code>.
+on git commit <code>c92bc9bf7</code>.
 </em></p>
