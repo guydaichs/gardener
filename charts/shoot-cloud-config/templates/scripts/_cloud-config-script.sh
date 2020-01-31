@@ -24,6 +24,27 @@ function docker-preload() {
   fi
 }
 
+{{- if .worker.kubeletDataVolume }}
+
+function format-data-disk() {
+LABEL=datadisk
+if ! blkid --label $LABEL > /dev/null ; then
+    TARGET_DISK=$(lsblk -dbsnP -o NAME,PARTTYPE,FSTYPE,SIZE | grep 'PARTTYPE=""' | grep 'FSTYPE=""' | grep 'SIZE="{{.worker.kubeletDataVolume.size}}"' | head -n1 | cut -f2 -d\")
+    echo "found data disk $TARGET_DISK"
+    mkfs.xfs -L $LABEL  /dev/$TARGET_DISK
+    mkdir /tmp/m
+    mount LABEL=$LABEL /tmp/m
+    cp -a /var/lib/* /tmp/m/
+    umount /tmp/m
+    mount LABEL=datadisk /var/lib
+fi
+}
+
+format-data-disk
+
+{{- end}}
+
+
 {{ range $name, $image := (required ".images is required" .images) -}}
 docker-preload "{{ $name }}" "{{ $image }}"
 {{ end }}
@@ -75,7 +96,7 @@ if ! diff "$PATH_CLOUDCONFIG" "$PATH_CLOUDCONFIG_OLD" >/dev/null; then
     echo "Successfully applied new cloud config version"
     systemctl daemon-reload
 {{- range $name := (required ".worker.units is required" .worker.units) }}
-{{- if ne $name "docker.service" }}
+{{- if and (ne $name "docker.service") (ne $name "var-lib.mount") }}
     systemctl enable {{ $name }} && systemctl restart --no-block {{ $name }}
 {{- end }}
 {{- end }}
