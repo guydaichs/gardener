@@ -39,86 +39,86 @@ bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh 
 
 # extensions.gardener.cloud APIs
 
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-groups.sh \
-  "deepcopy,client,informer,lister" \
-  github.com/gardener/gardener/pkg/client/extensions \
-  github.com/gardener/gardener/pkg/apis \
-  "extensions:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-# settings.gardener.cloud APIs
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-groups.sh \
-  "all" \
-  github.com/gardener/gardener/pkg/client/settings \
-  github.com/gardener/gardener/pkg/apis \
-  "settings:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  "deepcopy,defaulter,conversion" \
-  github.com/gardener/gardener/pkg/client/settings \
-  github.com/gardener/gardener/pkg/apis \
-  github.com/gardener/gardener/pkg/apis \
-  "settings:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-# Componentconfig for controller-manager
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  deepcopy,defaulter \
-  github.com/gardener/gardener/pkg/client/componentconfig \
-  github.com/gardener/gardener/pkg/controllermanager/apis \
-  github.com/gardener/gardener/pkg/controllermanager/apis \
-  "config:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  conversion \
-  github.com/gardener/gardener/pkg/client/componentconfig \
-  github.com/gardener/gardener/pkg/controllermanager/apis \
-  github.com/gardener/gardener/pkg/controllermanager/apis \
-  "config:v1alpha1" \
-  --extra-peer-dirs=github.com/gardener/gardener/pkg/controllermanager/apis/config,github.com/gardener/gardener/pkg/controllermanager/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-# Configuration for gardener scheduler
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  deepcopy,defaulter \
-  github.com/gardener/gardener/pkg/scheduler/client \
-  github.com/gardener/gardener/pkg/scheduler/apis \
-  github.com/gardener/gardener/pkg/scheduler/apis \
-  "config:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  conversion \
-  github.com/gardener/gardener/pkg/scheduler/client \
-  github.com/gardener/gardener/pkg/scheduler/apis \
-  github.com/gardener/gardener/pkg/scheduler/apis \
-  "config:v1alpha1" \
-  --extra-peer-dirs=github.com/gardener/gardener/pkg/scheduler/apis/config,github.com/gardener/gardener/pkg/scheduler/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-# Componentconfig for gardenlet
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  deepcopy,defaulter \
-  github.com/gardener/gardener/pkg/client/componentconfig \
-  github.com/gardener/gardener/pkg/gardenlet/apis \
-  github.com/gardener/gardener/pkg/gardenlet/apis \
-  "config:v1alpha1" \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
-
-bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
-  conversion \
-  github.com/gardener/gardener/pkg/client/componentconfig \
-  github.com/gardener/gardener/pkg/gardenlet/apis \
-  github.com/gardener/gardener/pkg/gardenlet/apis \
-  "config:v1alpha1" \
-  --extra-peer-dirs=github.com/gardener/gardener/pkg/gardenlet/apis/config,github.com/gardener/gardener/pkg/gardenlet/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
-  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-groups.sh \
+#  "deepcopy,client,informer,lister" \
+#  github.com/gardener/gardener/pkg/client/extensions \
+#  github.com/gardener/gardener/pkg/apis \
+#  "extensions:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+## settings.gardener.cloud APIs
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-groups.sh \
+#  "all" \
+#  github.com/gardener/gardener/pkg/client/settings \
+#  github.com/gardener/gardener/pkg/apis \
+#  "settings:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  "deepcopy,defaulter,conversion" \
+#  github.com/gardener/gardener/pkg/client/settings \
+#  github.com/gardener/gardener/pkg/apis \
+#  github.com/gardener/gardener/pkg/apis \
+#  "settings:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+## Componentconfig for controller-manager
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  deepcopy,defaulter \
+#  github.com/gardener/gardener/pkg/client/componentconfig \
+#  github.com/gardener/gardener/pkg/controllermanager/apis \
+#  github.com/gardener/gardener/pkg/controllermanager/apis \
+#  "config:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  conversion \
+#  github.com/gardener/gardener/pkg/client/componentconfig \
+#  github.com/gardener/gardener/pkg/controllermanager/apis \
+#  github.com/gardener/gardener/pkg/controllermanager/apis \
+#  "config:v1alpha1" \
+#  --extra-peer-dirs=github.com/gardener/gardener/pkg/controllermanager/apis/config,github.com/gardener/gardener/pkg/controllermanager/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+## Configuration for gardener scheduler
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  deepcopy,defaulter \
+#  github.com/gardener/gardener/pkg/scheduler/client \
+#  github.com/gardener/gardener/pkg/scheduler/apis \
+#  github.com/gardener/gardener/pkg/scheduler/apis \
+#  "config:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  conversion \
+#  github.com/gardener/gardener/pkg/scheduler/client \
+#  github.com/gardener/gardener/pkg/scheduler/apis \
+#  github.com/gardener/gardener/pkg/scheduler/apis \
+#  "config:v1alpha1" \
+#  --extra-peer-dirs=github.com/gardener/gardener/pkg/scheduler/apis/config,github.com/gardener/gardener/pkg/scheduler/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+## Componentconfig for gardenlet
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  deepcopy,defaulter \
+#  github.com/gardener/gardener/pkg/client/componentconfig \
+#  github.com/gardener/gardener/pkg/gardenlet/apis \
+#  github.com/gardener/gardener/pkg/gardenlet/apis \
+#  "config:v1alpha1" \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
+#
+#bash "${PROJECT_ROOT}"/vendor/k8s.io/code-generator/generate-internal-groups.sh \
+#  conversion \
+#  github.com/gardener/gardener/pkg/client/componentconfig \
+#  github.com/gardener/gardener/pkg/gardenlet/apis \
+#  github.com/gardener/gardener/pkg/gardenlet/apis \
+#  "config:v1alpha1" \
+#  --extra-peer-dirs=github.com/gardener/gardener/pkg/gardenlet/apis/config,github.com/gardener/gardener/pkg/gardenlet/apis/config/v1alpha1,k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/conversion,k8s.io/apimachinery/pkg/runtime,k8s.io/component-base/config,k8s.io/component-base/config/v1alpha1 \
+#  -h "${PROJECT_ROOT}/hack/LICENSE_BOILERPLATE.txt"
 
 rm -Rf ./${PROJECT_ROOT}/openapi/openapi_generated.go
 go install ./${PROJECT_ROOT}/vendor/k8s.io/kube-openapi/cmd/openapi-gen

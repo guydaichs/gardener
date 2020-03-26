@@ -2220,7 +2220,7 @@ var _ = Describe("Shoot Validation Tests", func() {
 		)
 	})
 
-	Describe("#ValidateKubeletConfiguration", func() {
+	FDescribe("#ValidateKubeletConfiguration", func() {
 		validResourceQuantityValueMi := "100Mi"
 		validResourceQuantityValueKi := "100"
 		invalidResourceQuantityValue := "-100Mi"
@@ -2245,6 +2245,12 @@ var _ = Describe("Shoot Validation Tests", func() {
 						ImageFSInodesFree: &imagefsInodesFree,
 						NodeFSAvailable:   &nodefsAvailable,
 						NodeFSInodesFree:  &nodefsInodesFree,
+					},
+					KubeReserved: &core.KubeletConfigKubeReserved{
+						Cpu:              &kubeReservedCpu,
+						Memory:           &kubeReservedMemory,
+						EphemeralStorage: &kubeReservedStorage,
+						Pid:              &kubeReservedPid,
 					},
 				}
 

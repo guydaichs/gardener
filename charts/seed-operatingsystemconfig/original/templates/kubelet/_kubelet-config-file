@@ -69,8 +69,12 @@ imageGCLowThresholdPercent: 40
 kubeAPIBurst: 50
 kubeAPIQPS: 50
 kubeReserved:
+{{- if .Values.worker.kubelet.kubeReserved }}
+{{ toYaml .Values.worker.kubelet.kubeReserved | indent 2 }}
+{{- else}}
   cpu: 80m
   memory: 1Gi
+{{- end }}
 hairpinMode: promiscuous-bridge
 {{- if semverCompare "< 1.15" .Values.kubernetes.version }}
 hostNetworkSources:

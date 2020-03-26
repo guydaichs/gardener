@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"sync"
 	"time"
 
@@ -186,6 +187,7 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		evictionSoft            = map[string]string{}
 		evictionSoftGracePeriod = map[string]string{}
 		evictionMinimumReclaim  = map[string]string{}
+		kubeReserved            = map[string]string{}
 	)
 
 	// use the spec.Kubernetes.Kubelet as default for worker
@@ -273,6 +275,22 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 				evictionMinimumReclaim["nodeFSInodesFree"] = nodeFSInodesFree.String()
 			}
 		}
+
+		if kubeletConfig.KubeReserved != nil {
+			reserved := kubeletConfig.KubeReserved
+			if cpu := reserved.Cpu; cpu != nil {
+				kubeReserved["cpu"] = cpu.String()
+			}
+			if memory := reserved.Memory; memory != nil {
+				kubeReserved["memory"] = memory.String()
+			}
+			if ephemeralStorage := reserved.EphemeralStorage; ephemeralStorage != nil {
+				kubeReserved["ephemeral-storage"] = ephemeralStorage.String()
+			}
+			if pid := reserved.Pid; pid != nil {
+				kubeReserved["pid"] = strconv.FormatInt(*pid, 10)
+			}
+		}
 	}
 
 	var kubelet = map[string]interface{}{
@@ -281,6 +299,7 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		"evictionSoft":            evictionSoft,
 		"evictionSoftGracePeriod": evictionSoftGracePeriod,
 		"evictionMinimumReclaim":  evictionMinimumReclaim,
+		"kubeReserved":  		   kubeReserved,
 	}
 
 	if kubeletConfig := kubeletConfig; kubeletConfig != nil {
@@ -304,6 +323,9 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		}
 		if evictionPressureTransitionPeriod := kubeletConfig.EvictionPressureTransitionPeriod; evictionPressureTransitionPeriod != nil {
 			kubelet["evictionPressureTransitionPeriod"] = *evictionPressureTransitionPeriod
+		}
+		if evictionMaxPodGracePeriod := kubeletConfig.EvictionMaxPodGracePeriod; evictionMaxPodGracePeriod != nil {
+			kubelet["evictionMaxPodGracePeriod"] = *evictionMaxPodGracePeriod
 		}
 		if evictionMaxPodGracePeriod := kubeletConfig.EvictionMaxPodGracePeriod; evictionMaxPodGracePeriod != nil {
 			kubelet["evictionMaxPodGracePeriod"] = *evictionMaxPodGracePeriod

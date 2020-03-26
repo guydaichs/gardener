@@ -594,6 +594,8 @@ type KubeletConfig struct {
 	//   imagefs.available:  1m30s
 	//   imagefs.inodesFree: 1m30s
 	EvictionSoftGracePeriod *KubeletConfigEvictionSoftGracePeriod `json:"evictionSoftGracePeriod,omitempty"`
+	// KubeReserved describes the kube-reserved resources
+	KubeReserved *KubeletConfigKubeReserved `json:"kubeReserved,omitempty"`
 	// MaxPods is the maximum number of Pods that are allowed by the Kubelet.
 	// +optional
 	// Default: 110
@@ -662,6 +664,18 @@ type KubeletConfigEvictionSoftGracePeriod struct {
 	// NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.
 	// +optional
 	NodeFSInodesFree *metav1.Duration `json:"nodeFSInodesFree,omitempty"`
+}
+
+// KubeletConfigKubeReserved contains resource reservations for kubernetes system daemons.
+type KubeletConfigKubeReserved struct {
+	// Cpu is the kube-reserved cpu
+	Cpu *resource.Quantity `json:"cpu,omitempty"`
+	// Memory is the kube-reserved memory
+	Memory *resource.Quantity `json:"memory,omitempty"`
+	// EphemeralStorage is the kube-reserved ephemeral-storage
+	EphemeralStorage *resource.Quantity `json:"ephemeralStorage,omitempty"`
+	// Pid is the kube-reserved process IDs
+	Pid *int64 `json:"pid,omitempty"`
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

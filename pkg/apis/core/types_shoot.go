@@ -495,6 +495,8 @@ type KubeletConfig struct {
 	// ImagePullProgressDeadline describes the time limit under which if no pulling progress is made, the image pulling will be cancelled.
 	// Default: 1m
 	ImagePullProgressDeadline *metav1.Duration
+	// KubeReserved describes the kube-reserved resources
+	KubeReserved *KubeletConfigKubeReserved
 }
 
 // KubeletConfigEviction contains kubelet eviction thresholds supporting either a resource.Quantity or a percentage based value.
@@ -537,6 +539,18 @@ type KubeletConfigEvictionSoftGracePeriod struct {
 	NodeFSAvailable *metav1.Duration
 	// NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.
 	NodeFSInodesFree *metav1.Duration
+}
+
+// KubeletConfigKubeReserved contains resource reservations for kubernetes system daemons.
+type KubeletConfigKubeReserved struct {
+	// Cpu is the kube-reserved cpu
+	Cpu *resource.Quantity
+	// Memory is the kube-reserved memory
+	Memory *resource.Quantity
+	// EphemeralStorage is the kube-reserved ephemeral-storage
+	EphemeralStorage *resource.Quantity
+	// Pid is the kube-reserved process IDs
+	Pid *int64
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

@@ -87,6 +87,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEviction":                 schema_pkg_apis_core_v1alpha1_KubeletConfigEviction(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionMinimumReclaim":   schema_pkg_apis_core_v1alpha1_KubeletConfigEvictionMinimumReclaim(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionSoftGracePeriod":  schema_pkg_apis_core_v1alpha1_KubeletConfigEvictionSoftGracePeriod(ref),
+		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigKubeReserved":             schema_pkg_apis_core_v1alpha1_KubeletConfigKubeReserved(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.Kubernetes":                            schema_pkg_apis_core_v1alpha1_Kubernetes(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubernetesConfig":                      schema_pkg_apis_core_v1alpha1_KubernetesConfig(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubernetesDashboard":                   schema_pkg_apis_core_v1alpha1_KubernetesDashboard(ref),
@@ -199,6 +200,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEviction":                  schema_pkg_apis_core_v1beta1_KubeletConfigEviction(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionMinimumReclaim":    schema_pkg_apis_core_v1beta1_KubeletConfigEvictionMinimumReclaim(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionSoftGracePeriod":   schema_pkg_apis_core_v1beta1_KubeletConfigEvictionSoftGracePeriod(ref),
+		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigKubeReserved":              schema_pkg_apis_core_v1beta1_KubeletConfigKubeReserved(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.Kubernetes":                             schema_pkg_apis_core_v1beta1_Kubernetes(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubernetesConfig":                       schema_pkg_apis_core_v1beta1_KubernetesConfig(ref),
 		"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubernetesDashboard":                    schema_pkg_apis_core_v1beta1_KubernetesDashboard(ref),
@@ -1375,7 +1377,7 @@ func schema_pkg_apis_core_v1alpha1_ClusterAutoscaler(ref common.ReferenceCallbac
 				Properties: map[string]spec.Schema{
 					"scaleDownDelayAfterAdd": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ScaleDownDelayAfterAdd defines how long after scale up that scale down evaluation resumes (default: 10 mins).",
+							Description: "ScaleDownDelayAfterAdd defines how long after scale up that scale down evaluation resumes (default: 1 hour).",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -1393,7 +1395,7 @@ func schema_pkg_apis_core_v1alpha1_ClusterAutoscaler(ref common.ReferenceCallbac
 					},
 					"scaleDownUnneededTime": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ScaleDownUnneededTime defines how long a node should be unneeded before it is eligible for scale down (default: 10 mins).",
+							Description: "ScaleDownUnneededTime defines how long a node should be unneeded before it is eligible for scale down (default: 30 mins).",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -2608,6 +2610,12 @@ func schema_pkg_apis_core_v1alpha1_KubeletConfig(ref common.ReferenceCallback) c
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionSoftGracePeriod"),
 						},
 					},
+					"kubeReserved": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeReserved describes the kube-reserved resources",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigKubeReserved"),
+						},
+					},
 					"maxPods": {
 						SchemaProps: spec.SchemaProps{
 							Description: "MaxPods is the maximum number of Pods that are allowed by the Kubelet. Default: 110",
@@ -2632,7 +2640,7 @@ func schema_pkg_apis_core_v1alpha1_KubeletConfig(ref common.ReferenceCallback) c
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEviction", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionMinimumReclaim", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionSoftGracePeriod", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+			"github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEviction", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionMinimumReclaim", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigEvictionSoftGracePeriod", "github.com/gardener/gardener/pkg/apis/core/v1alpha1.KubeletConfigKubeReserved", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
 	}
 }
 
@@ -2771,6 +2779,46 @@ func schema_pkg_apis_core_v1alpha1_KubeletConfigEvictionSoftGracePeriod(ref comm
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_pkg_apis_core_v1alpha1_KubeletConfigKubeReserved(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KubeletConfigKubeReserved contains resource reservations for kubernetes system daemons.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"cpu": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Cpu is the kube-reserved cpu",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"memory": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Memory is the kube-reserved memory",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"ephemeralStorage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EphemeralStorage is the kube-reserved ephemeral-storage",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"pid": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pid is the kube-reserved process IDs",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
@@ -6449,7 +6497,7 @@ func schema_pkg_apis_core_v1beta1_ClusterAutoscaler(ref common.ReferenceCallback
 				Properties: map[string]spec.Schema{
 					"scaleDownDelayAfterAdd": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ScaleDownDelayAfterAdd defines how long after scale up that scale down evaluation resumes (default: 10 mins).",
+							Description: "ScaleDownDelayAfterAdd defines how long after scale up that scale down evaluation resumes (default: 1 hour).",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -6467,7 +6515,7 @@ func schema_pkg_apis_core_v1beta1_ClusterAutoscaler(ref common.ReferenceCallback
 					},
 					"scaleDownUnneededTime": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ScaleDownUnneededTime defines how long a node should be unneeded before it is eligible for scale down (default: 10 mins).",
+							Description: "ScaleDownUnneededTime defines how long a node should be unneeded before it is eligible for scale down (default: 30 mins).",
 							Ref:         ref("k8s.io/apimachinery/pkg/apis/meta/v1.Duration"),
 						},
 					},
@@ -7603,6 +7651,12 @@ func schema_pkg_apis_core_v1beta1_KubeletConfig(ref common.ReferenceCallback) co
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionSoftGracePeriod"),
 						},
 					},
+					"kubeReserved": {
+						SchemaProps: spec.SchemaProps{
+							Description: "KubeReserved describes the kube-reserved resources",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigKubeReserved"),
+						},
+					},
 					"maxPods": {
 						SchemaProps: spec.SchemaProps{
 							Description: "MaxPods is the maximum number of Pods that are allowed by the Kubelet. Default: 110",
@@ -7627,7 +7681,7 @@ func schema_pkg_apis_core_v1beta1_KubeletConfig(ref common.ReferenceCallback) co
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEviction", "github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionMinimumReclaim", "github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionSoftGracePeriod", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+			"github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEviction", "github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionMinimumReclaim", "github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigEvictionSoftGracePeriod", "github.com/gardener/gardener/pkg/apis/core/v1beta1.KubeletConfigKubeReserved", "k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
 	}
 }
 
@@ -7766,6 +7820,46 @@ func schema_pkg_apis_core_v1beta1_KubeletConfigEvictionSoftGracePeriod(ref commo
 		},
 		Dependencies: []string{
 			"k8s.io/apimachinery/pkg/apis/meta/v1.Duration"},
+	}
+}
+
+func schema_pkg_apis_core_v1beta1_KubeletConfigKubeReserved(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "KubeletConfigKubeReserved contains resource reservations for kubernetes system daemons.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"cpu": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Cpu is the kube-reserved cpu",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"memory": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Memory is the kube-reserved memory",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"ephemeralStorage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "EphemeralStorage is the kube-reserved ephemeral-storage",
+							Ref:         ref("k8s.io/apimachinery/pkg/api/resource.Quantity"),
+						},
+					},
+					"pid": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pid is the kube-reserved process IDs",
+							Type:        []string{"integer"},
+							Format:      "int64",
+						},
+					},
+				},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/apimachinery/pkg/api/resource.Quantity"},
 	}
 }
 
