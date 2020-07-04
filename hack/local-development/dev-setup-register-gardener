@@ -26,7 +26,8 @@ APISERVICE_PORT_STRING=""
 
 APISERVER_EXTERNALNAME=docker.for.mac.localhost
 if [[ "$(uname -s)" != *"Darwin"* ]]; then
-  APISERVER_EXTERNALNAME=gardener.localhost
+  #APISERVER_EXTERNALNAME=gardener.localhost
+  APISERVER_EXTERNALNAME=host.docker.internal
 fi
 
 CORE_V1ALPHA1_APISERVICE_NAME="v1alpha1.core.gardener.cloud"
@@ -39,7 +40,8 @@ CONTROLLER_MANAGER_SERVICE_PORT=443
 
 CONTROLLER_MANAGER_EXTERNALNAME=docker.for.mac.localhost
 if [[ "$(uname -s)" != *"Darwin"* ]]; then
-  CONTROLLER_MANAGER_EXTERNALNAME=gardener.localhost
+  #CONTROLLER_MANAGER_EXTERNALNAME=gardener.localhost
+  APISERVER_EXTERNALNAME=host.docker.internal
 fi
 
 if [[ $(k8s_env) == "$NODELESS" ]]; then

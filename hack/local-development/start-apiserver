@@ -30,6 +30,7 @@ apiserver_flags="
   --authorization-always-allow-paths=/healthz \
   --kubeconfig $kubeconfig \
   --secure-port=8443 \
+  --bind-address=127.0.0.1 \
   --tls-cert-file $tls_dir/tls.crt \
   --tls-private-key-file $tls_dir/tls.key \
   --v 2"
