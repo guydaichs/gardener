@@ -2793,9 +2793,10 @@ var _ = Describe("Shoot Validation Tests", func() {
 
 		kubeReservedCgroupName := "kubeReservedCgroup"
 		systemReservedCgroupName := "systemReservedCgroup"
-		kubeRservedAllocatableName := "kube-reserved"
+		kubeReservedAllocatableName := "kube-reserved"
 		systemReservedAllocatableName := "system-reserved"
 		podsAllocatableName := "pods"
+		invalidAllocatableName := "not-reserved"
 		DescribeTable("validate the kubelet configuration - EnforceNodAllocatable",
 			func(enforceNodeAllocatable []string, kubeReservedCgroup, systemReservedCgroup *string, matcher gomegatypes.GomegaMatcher) {
 				kubeletConfig := core.KubeletConfig{
@@ -2809,13 +2810,13 @@ var _ = Describe("Shoot Validation Tests", func() {
 				Expect(errList).To(matcher)
 			},
 
-			Entry("valid configuration", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, &systemReservedCgroupName, HaveLen(0)),
-			Entry("kube-reserved should provide cgroup", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, nil, &systemReservedCgroupName, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+			Entry("valid configuration", []string{podsAllocatableName, kubeReservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, &systemReservedCgroupName, HaveLen(0)),
+			Entry("kube-reserved should provide cgroup", []string{podsAllocatableName, kubeReservedAllocatableName, systemReservedAllocatableName}, nil, &systemReservedCgroupName, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
 				"Type":     Equal(field.ErrorTypeInvalid),
 				"Field":    Equal(field.NewPath("enforceNodeAllocatable").String()),
-				"BadValue": Equal(kubeRservedAllocatableName),
+				"BadValue": Equal(kubeReservedAllocatableName),
 			})))),
-			Entry("system-reserved should provide cgroup", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, nil, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+			Entry("system-reserved should provide cgroup", []string{podsAllocatableName, kubeReservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, nil, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
 				"Type":     Equal(field.ErrorTypeInvalid),
 				"Field":    Equal(field.NewPath("enforceNodeAllocatable").String()),
 				"BadValue": Equal(systemReservedAllocatableName),
@@ -2824,6 +2825,11 @@ var _ = Describe("Shoot Validation Tests", func() {
 				"Type":     Equal(field.ErrorTypeInvalid),
 				"Field":    Equal(field.NewPath("enforceNodeAllocatable[1]").String()),
 				"BadValue": Equal(podsAllocatableName),
+			})))),
+			Entry("system-reserved should provide cgroup", []string{invalidAllocatableName}, nil, nil, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":     Equal(field.ErrorTypeInvalid),
+				"Field":    Equal(field.NewPath("enforceNodeAllocatable[0]").String()),
+				"BadValue": Equal(invalidAllocatableName),
 			})))),
 		)
 

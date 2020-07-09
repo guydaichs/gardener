@@ -320,6 +320,8 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		"evictionSoft":            evictionSoft,
 		"evictionSoftGracePeriod": evictionSoftGracePeriod,
 		"evictionMinimumReclaim":  evictionMinimumReclaim,
+		"kubeReserved":            kubeReserved,
+		"systemReserved":          systemReserved,
 	}
 
 	if kubeletConfig := kubeletConfig; kubeletConfig != nil {
@@ -350,12 +352,6 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		if failSwapOn := kubeletConfig.FailSwapOn; failSwapOn != nil {
 			kubelet["failSwapOn"] = *failSwapOn
 		}
-		if kubeReserved := kubeletConfig.KubeReserved; kubeReserved != nil {
-			kubelet["kubeReserved"] = kubeReserved
-		}
-		if systemReserved := kubeletConfig.SystemReserved; systemReserved != nil {
-			kubelet["systemReserved"] = systemReserved
-		}
 		if enforceNodeAllocatable := kubeletConfig.EnforceNodeAllocatable; enforceNodeAllocatable != nil {
 			kubelet["enforceNodeAllocatable"] = enforceNodeAllocatable
 		}
@@ -367,6 +363,7 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		}
 	}
 
+	fmt.Println(kubelet)
 	workerConfig := map[string]interface{}{
 		"name":              worker.Name,
 		"kubelet":           kubelet,

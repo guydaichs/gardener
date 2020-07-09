@@ -1081,36 +1081,36 @@ const systemReservedCgroupName string = "SystemReservedCgroupName"
 func validateKubeletConfigEnforceNodeAllocatable(nodeAllocatable []string, kubeReservedCgroup, systemReservedCgroup *string, fldPath *field.Path) field.ErrorList {
 	allErrs := field.ErrorList{}
 	var (
-		hasPods   bool
-		hasKube   bool
-		hasSystem bool
+		enforcePods   bool
+		enforceKube   bool
+		enforceSystem bool
 	)
 	if len(nodeAllocatable) > 0 {
 		for idx := range nodeAllocatable {
 			switch allocatable := nodeAllocatable[idx]; allocatable {
 			case PodsAllocatableName:
-				if hasPods {
+				if enforcePods {
 					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
 				}
-				hasPods = true
+				enforcePods = true
 			case KubeReservedAllocatableName:
-				if hasKube {
+				if enforceKube {
 					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
 				}
-				hasKube = true
+				enforceKube = true
 			case SystemReservedAllocatableName:
-				if hasSystem {
+				if enforceSystem {
 					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
 				}
-				hasSystem = true
+				enforceSystem = true
 			default:
 				allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, fmt.Sprintf("Enforced Node Allocatable can only be one of: %s, %s, %s", PodsAllocatableName, KubeReservedAllocatableName, SystemReservedAllocatableName)))
 			}
 		}
-		if hasKube && kubeReservedCgroup == nil {
+		if enforceKube && kubeReservedCgroup == nil {
 			allErrs = append(allErrs, field.Invalid(fldPath, KubeReservedAllocatableName, fmt.Sprintf("Enforced Node Allocatable %s was found, but %s was not provided", KubeReservedAllocatableName, KubeReservedCgroupName)))
 		}
-		if hasSystem && systemReservedCgroup == nil {
+		if enforceSystem && systemReservedCgroup == nil {
 			allErrs = append(allErrs, field.Invalid(fldPath, SystemReservedAllocatableName, fmt.Sprintf("Enforced Node Allocatable %s was found, but %s was not provided", SystemReservedAllocatableName, systemReservedCgroupName)))
 		}
 	}

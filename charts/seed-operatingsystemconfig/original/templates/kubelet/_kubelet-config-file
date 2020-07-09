@@ -81,10 +81,10 @@ systemReserved:
 {{- end }}
 {{- end }}
 {{- if .Values.worker.kubelet.kubeReservedCgroup }}
-  kubeReservedCgroup: .Values.worker.kubelet.kubeReservedCgroup
+kubeReservedCgroup: {{ .Values.worker.kubelet.kubeReservedCgroup }}
 {{- end }}
 {{- if .Values.worker.kubelet.systemReservedCgroup }}
-  systemReservedCgroup: .Values.worker.kubelet.systemReservedCgroup
+systemReservedCgroup: {{ .Values.worker.kubelet.systemReservedCgroup }}
 {{- end }}
 hairpinMode: promiscuous-bridge
 {{- if semverCompare "< 1.15" .Values.kubernetes.version }}
