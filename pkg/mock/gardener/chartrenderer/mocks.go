@@ -10,30 +10,30 @@ import (
 	reflect "reflect"
 )
 
-// MockInterface is a mock of Interface interface
+// MockInterface is a mock of Interface interface.
 type MockInterface struct {
 	ctrl     *gomock.Controller
 	recorder *MockInterfaceMockRecorder
 }
 
-// MockInterfaceMockRecorder is the mock recorder for MockInterface
+// MockInterfaceMockRecorder is the mock recorder for MockInterface.
 type MockInterfaceMockRecorder struct {
 	mock *MockInterface
 }
 
-// NewMockInterface creates a new mock instance
+// NewMockInterface creates a new mock instance.
 func NewMockInterface(ctrl *gomock.Controller) *MockInterface {
 	mock := &MockInterface{ctrl: ctrl}
 	mock.recorder = &MockInterfaceMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockInterface) EXPECT() *MockInterfaceMockRecorder {
 	return m.recorder
 }
 
-// Render mocks base method
+// Render mocks base method.
 func (m *MockInterface) Render(arg0, arg1, arg2 string, arg3 interface{}) (*chartrenderer.RenderedChart, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Render", arg0, arg1, arg2, arg3)
@@ -42,13 +42,13 @@ func (m *MockInterface) Render(arg0, arg1, arg2 string, arg3 interface{}) (*char
 	return ret0, ret1
 }
 
-// Render indicates an expected call of Render
+// Render indicates an expected call of Render.
 func (mr *MockInterfaceMockRecorder) Render(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Render", reflect.TypeOf((*MockInterface)(nil).Render), arg0, arg1, arg2, arg3)
 }
 
-// RenderArchive mocks base method
+// RenderArchive mocks base method.
 func (m *MockInterface) RenderArchive(arg0 []byte, arg1, arg2 string, arg3 interface{}) (*chartrenderer.RenderedChart, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "RenderArchive", arg0, arg1, arg2, arg3)
@@ -57,7 +57,7 @@ func (m *MockInterface) RenderArchive(arg0 []byte, arg1, arg2 string, arg3 inter
 	return ret0, ret1
 }
 
-// RenderArchive indicates an expected call of RenderArchive
+// RenderArchive indicates an expected call of RenderArchive.
 func (mr *MockInterfaceMockRecorder) RenderArchive(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RenderArchive", reflect.TypeOf((*MockInterface)(nil).RenderArchive), arg0, arg1, arg2, arg3)

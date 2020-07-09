@@ -11,30 +11,30 @@ import (
 	reflect "reflect"
 )
 
-// MockFactory is a mock of Factory interface
+// MockFactory is a mock of Factory interface.
 type MockFactory struct {
 	ctrl     *gomock.Controller
 	recorder *MockFactoryMockRecorder
 }
 
-// MockFactoryMockRecorder is the mock recorder for MockFactory
+// MockFactoryMockRecorder is the mock recorder for MockFactory.
 type MockFactoryMockRecorder struct {
 	mock *MockFactory
 }
 
-// NewMockFactory creates a new mock instance
+// NewMockFactory creates a new mock instance.
 func NewMockFactory(ctrl *gomock.Controller) *MockFactory {
 	mock := &MockFactory{ctrl: ctrl}
 	mock.recorder = &MockFactoryMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockFactory) EXPECT() *MockFactoryMockRecorder {
 	return m.recorder
 }
 
-// NewForConfig mocks base method
+// NewForConfig mocks base method.
 func (m *MockFactory) NewForConfig(arg0 *rest.Config) (chartrenderer.Interface, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "NewForConfig", arg0)
@@ -43,7 +43,7 @@ func (m *MockFactory) NewForConfig(arg0 *rest.Config) (chartrenderer.Interface, 
 	return ret0, ret1
 }
 
-// NewForConfig indicates an expected call of NewForConfig
+// NewForConfig indicates an expected call of NewForConfig.
 func (mr *MockFactoryMockRecorder) NewForConfig(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewForConfig", reflect.TypeOf((*MockFactory)(nil).NewForConfig), arg0)

@@ -17,30 +17,30 @@ import (
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
-// MockSecrets is a mock of Secrets interface
+// MockSecrets is a mock of Secrets interface.
 type MockSecrets struct {
 	ctrl     *gomock.Controller
 	recorder *MockSecretsMockRecorder
 }
 
-// MockSecretsMockRecorder is the mock recorder for MockSecrets
+// MockSecretsMockRecorder is the mock recorder for MockSecrets.
 type MockSecretsMockRecorder struct {
 	mock *MockSecrets
 }
 
-// NewMockSecrets creates a new mock instance
+// NewMockSecrets creates a new mock instance.
 func NewMockSecrets(ctrl *gomock.Controller) *MockSecrets {
 	mock := &MockSecrets{ctrl: ctrl}
 	mock.recorder = &MockSecretsMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockSecrets) EXPECT() *MockSecretsMockRecorder {
 	return m.recorder
 }
 
-// Delete mocks base method
+// Delete mocks base method.
 func (m *MockSecrets) Delete(arg0 kubernetes0.Interface, arg1 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
@@ -48,13 +48,13 @@ func (m *MockSecrets) Delete(arg0 kubernetes0.Interface, arg1 string) error {
 	return ret0
 }
 
-// Delete indicates an expected call of Delete
+// Delete indicates an expected call of Delete.
 func (mr *MockSecretsMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockSecrets)(nil).Delete), arg0, arg1)
 }
 
-// Deploy mocks base method
+// Deploy mocks base method.
 func (m *MockSecrets) Deploy(arg0 context.Context, arg1 kubernetes0.Interface, arg2 kubernetes.Interface, arg3 string) (map[string]*v1.Secret, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Deploy", arg0, arg1, arg2, arg3)
@@ -63,36 +63,36 @@ func (m *MockSecrets) Deploy(arg0 context.Context, arg1 kubernetes0.Interface, a
 	return ret0, ret1
 }
 
-// Deploy indicates an expected call of Deploy
+// Deploy indicates an expected call of Deploy.
 func (mr *MockSecretsMockRecorder) Deploy(arg0, arg1, arg2, arg3 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Deploy", reflect.TypeOf((*MockSecrets)(nil).Deploy), arg0, arg1, arg2, arg3)
 }
 
-// MockChart is a mock of Chart interface
+// MockChart is a mock of Chart interface.
 type MockChart struct {
 	ctrl     *gomock.Controller
 	recorder *MockChartMockRecorder
 }
 
-// MockChartMockRecorder is the mock recorder for MockChart
+// MockChartMockRecorder is the mock recorder for MockChart.
 type MockChartMockRecorder struct {
 	mock *MockChart
 }
 
-// NewMockChart creates a new mock instance
+// NewMockChart creates a new mock instance.
 func NewMockChart(ctrl *gomock.Controller) *MockChart {
 	mock := &MockChart{ctrl: ctrl}
 	mock.recorder = &MockChartMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockChart) EXPECT() *MockChartMockRecorder {
 	return m.recorder
 }
 
-// Apply mocks base method
+// Apply mocks base method.
 func (m *MockChart) Apply(arg0 context.Context, arg1 kubernetes.ChartApplier, arg2 string, arg3 imagevector.ImageVector, arg4, arg5 string, arg6 map[string]interface{}) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Apply", arg0, arg1, arg2, arg3, arg4, arg5, arg6)
@@ -100,13 +100,13 @@ func (m *MockChart) Apply(arg0 context.Context, arg1 kubernetes.ChartApplier, ar
 	return ret0
 }
 
-// Apply indicates an expected call of Apply
+// Apply indicates an expected call of Apply.
 func (mr *MockChartMockRecorder) Apply(arg0, arg1, arg2, arg3, arg4, arg5, arg6 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Apply", reflect.TypeOf((*MockChart)(nil).Apply), arg0, arg1, arg2, arg3, arg4, arg5, arg6)
 }
 
-// Delete mocks base method
+// Delete mocks base method.
 func (m *MockChart) Delete(arg0 context.Context, arg1 client.Client, arg2 string) error {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Delete", arg0, arg1, arg2)
@@ -114,13 +114,13 @@ func (m *MockChart) Delete(arg0 context.Context, arg1 client.Client, arg2 string
 	return ret0
 }
 
-// Delete indicates an expected call of Delete
+// Delete indicates an expected call of Delete.
 func (mr *MockChartMockRecorder) Delete(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockChart)(nil).Delete), arg0, arg1, arg2)
 }
 
-// Render mocks base method
+// Render mocks base method.
 func (m *MockChart) Render(arg0 chartrenderer.Interface, arg1 string, arg2 imagevector.ImageVector, arg3, arg4 string, arg5 map[string]interface{}) (string, []byte, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Render", arg0, arg1, arg2, arg3, arg4, arg5)
@@ -130,36 +130,36 @@ func (m *MockChart) Render(arg0 chartrenderer.Interface, arg1 string, arg2 image
 	return ret0, ret1, ret2
 }
 
-// Render indicates an expected call of Render
+// Render indicates an expected call of Render.
 func (mr *MockChartMockRecorder) Render(arg0, arg1, arg2, arg3, arg4, arg5 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Render", reflect.TypeOf((*MockChart)(nil).Render), arg0, arg1, arg2, arg3, arg4, arg5)
 }
 
-// MockShootClients is a mock of ShootClients interface
+// MockShootClients is a mock of ShootClients interface.
 type MockShootClients struct {
 	ctrl     *gomock.Controller
 	recorder *MockShootClientsMockRecorder
 }
 
-// MockShootClientsMockRecorder is the mock recorder for MockShootClients
+// MockShootClientsMockRecorder is the mock recorder for MockShootClients.
 type MockShootClientsMockRecorder struct {
 	mock *MockShootClients
 }
 
-// NewMockShootClients creates a new mock instance
+// NewMockShootClients creates a new mock instance.
 func NewMockShootClients(ctrl *gomock.Controller) *MockShootClients {
 	mock := &MockShootClients{ctrl: ctrl}
 	mock.recorder = &MockShootClientsMockRecorder{mock}
 	return mock
 }
 
-// EXPECT returns an object that allows the caller to indicate expected use
+// EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockShootClients) EXPECT() *MockShootClientsMockRecorder {
 	return m.recorder
 }
 
-// ChartApplier mocks base method
+// ChartApplier mocks base method.
 func (m *MockShootClients) ChartApplier() kubernetes.ChartApplier {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "ChartApplier")
@@ -167,13 +167,13 @@ func (m *MockShootClients) ChartApplier() kubernetes.ChartApplier {
 	return ret0
 }
 
-// ChartApplier indicates an expected call of ChartApplier
+// ChartApplier indicates an expected call of ChartApplier.
 func (mr *MockShootClientsMockRecorder) ChartApplier() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ChartApplier", reflect.TypeOf((*MockShootClients)(nil).ChartApplier))
 }
 
-// Client mocks base method
+// Client mocks base method.
 func (m *MockShootClients) Client() client.Client {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Client")
@@ -181,13 +181,13 @@ func (m *MockShootClients) Client() client.Client {
 	return ret0
 }
 
-// Client indicates an expected call of Client
+// Client indicates an expected call of Client.
 func (mr *MockShootClientsMockRecorder) Client() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Client", reflect.TypeOf((*MockShootClients)(nil).Client))
 }
 
-// Clientset mocks base method
+// Clientset mocks base method.
 func (m *MockShootClients) Clientset() kubernetes0.Interface {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Clientset")
@@ -195,13 +195,13 @@ func (m *MockShootClients) Clientset() kubernetes0.Interface {
 	return ret0
 }
 
-// Clientset indicates an expected call of Clientset
+// Clientset indicates an expected call of Clientset.
 func (mr *MockShootClientsMockRecorder) Clientset() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Clientset", reflect.TypeOf((*MockShootClients)(nil).Clientset))
 }
 
-// GardenerClientset mocks base method
+// GardenerClientset mocks base method.
 func (m *MockShootClients) GardenerClientset() kubernetes.Interface {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GardenerClientset")
@@ -209,13 +209,13 @@ func (m *MockShootClients) GardenerClientset() kubernetes.Interface {
 	return ret0
 }
 
-// GardenerClientset indicates an expected call of GardenerClientset
+// GardenerClientset indicates an expected call of GardenerClientset.
 func (mr *MockShootClientsMockRecorder) GardenerClientset() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GardenerClientset", reflect.TypeOf((*MockShootClients)(nil).GardenerClientset))
 }
 
-// Version mocks base method
+// Version mocks base method.
 func (m *MockShootClients) Version() *version.Info {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "Version")
@@ -223,7 +223,7 @@ func (m *MockShootClients) Version() *version.Info {
 	return ret0
 }
 
-// Version indicates an expected call of Version
+// Version indicates an expected call of Version.
 func (mr *MockShootClientsMockRecorder) Version() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Version", reflect.TypeOf((*MockShootClients)(nil).Version))

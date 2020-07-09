@@ -983,6 +983,15 @@ func ValidateKubeletConfig(kubeletConfig core.KubeletConfig, fldPath *field.Path
 	if kubeletConfig.EvictionSoftGracePeriod != nil {
 		allErrs = append(allErrs, validateKubeletConfigEvictionSoftGracePeriod(kubeletConfig.EvictionSoftGracePeriod, fldPath.Child("evictionSoftGracePeriod"))...)
 	}
+	if kubeletConfig.KubeReserved != nil {
+		allErrs = append(allErrs, validateKubeletConfigKubeReserved(kubeletConfig.KubeReserved, fldPath.Child("kubeReserved"))...)
+	}
+	if kubeletConfig.SystemReserved != nil {
+		allErrs = append(allErrs, validateKubeletConfigSystemReserved(kubeletConfig.SystemReserved, fldPath.Child("systemReserved"))...)
+	}
+	if kubeletConfig.EnforceNodeAllocatable != nil {
+		allErrs = append(allErrs, validateKubeletConfigEnforceNodeAllocatable(kubeletConfig.EnforceNodeAllocatable, kubeletConfig.KubeReservedCgroup, kubeletConfig.SystemReservedCgroup, fldPath.Child("enforceNodeAllocatable"))...)
+	}
 	return allErrs
 }
 
@@ -1023,6 +1032,88 @@ func validateKubeletConfigEvictionSoftGracePeriod(eviction *core.KubeletConfigEv
 	allErrs = append(allErrs, ValidatePositiveDuration(eviction.ImageFSInodesFree, fldPath.Child("imagefsInodesFree"))...)
 	allErrs = append(allErrs, ValidatePositiveDuration(eviction.NodeFSAvailable, fldPath.Child("nodefsAvailable"))...)
 	allErrs = append(allErrs, ValidatePositiveDuration(eviction.ImageFSInodesFree, fldPath.Child("imagefsInodesFree"))...)
+	return allErrs
+}
+
+// Reserved PIDs have to be non-negative
+const ReservedPIDsMinimum int64 = 0
+
+func validateKubeletConfigKubeReserved(reserved *core.KubeletConfigKubeReserved, fldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+	if reserved.CPU != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("cpu", *reserved.CPU, fldPath.Child("cpu"))...)
+	}
+	if reserved.Memory != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("memory", *reserved.Memory, fldPath.Child("memory"))...)
+	}
+	if reserved.EphemeralStorage != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("ephemeralStorage", *reserved.EphemeralStorage, fldPath.Child("ephemeralStorage"))...)
+	}
+	if *reserved.PID < 0 {
+		allErrs = append(allErrs, field.Invalid(fldPath.Child("pid"), *reserved.PID, fmt.Sprintf("PID must be atleast %d", ReservedPIDsMinimum)))
+	}
+	return allErrs
+}
+
+func validateKubeletConfigSystemReserved(reserved *core.KubeletConfigSystemReserved, fldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+	if reserved.CPU != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("cpu", *reserved.CPU, fldPath.Child("cpu"))...)
+	}
+	if reserved.Memory != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("memory", *reserved.Memory, fldPath.Child("memory"))...)
+	}
+	if reserved.EphemeralStorage != nil {
+		allErrs = append(allErrs, validateResourceQuantityValue("ephemeralStorage", *reserved.EphemeralStorage, fldPath.Child("ephemeralStorage"))...)
+	}
+	if *reserved.PID < 0 {
+		allErrs = append(allErrs, field.Invalid(fldPath.Child("pid"), *reserved.PID, fmt.Sprintf("PID must be atleast %d", ReservedPIDsMinimum)))
+	}
+	return allErrs
+}
+
+const KubeReservedAllocatableName string = "kube-reserved"
+const SystemReservedAllocatableName string = "system-reserved"
+const PodsAllocatableName string = "pods"
+const KubeReservedCgroupName string = "KubeReservedCgroupName"
+const systemReservedCgroupName string = "SystemReservedCgroupName"
+
+func validateKubeletConfigEnforceNodeAllocatable(nodeAllocatable []string, kubeReservedCgroup, systemReservedCgroup *string, fldPath *field.Path) field.ErrorList {
+	allErrs := field.ErrorList{}
+	var (
+		hasPods   bool
+		hasKube   bool
+		hasSystem bool
+	)
+	if len(nodeAllocatable) > 0 {
+		for idx := range nodeAllocatable {
+			switch allocatable := nodeAllocatable[idx]; allocatable {
+			case PodsAllocatableName:
+				if hasPods {
+					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
+				}
+				hasPods = true
+			case KubeReservedAllocatableName:
+				if hasKube {
+					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
+				}
+				hasKube = true
+			case SystemReservedAllocatableName:
+				if hasSystem {
+					allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, "Enforced Node Allocatable should not be repeated"))
+				}
+				hasSystem = true
+			default:
+				allErrs = append(allErrs, field.Invalid(fldPath.Index(idx), allocatable, fmt.Sprintf("Enforced Node Allocatable can only be one of: %s, %s, %s", PodsAllocatableName, KubeReservedAllocatableName, SystemReservedAllocatableName)))
+			}
+		}
+		if hasKube && kubeReservedCgroup == nil {
+			allErrs = append(allErrs, field.Invalid(fldPath, KubeReservedAllocatableName, fmt.Sprintf("Enforced Node Allocatable %s was found, but %s was not provided", KubeReservedAllocatableName, KubeReservedCgroupName)))
+		}
+		if hasSystem && systemReservedCgroup == nil {
+			allErrs = append(allErrs, field.Invalid(fldPath, SystemReservedAllocatableName, fmt.Sprintf("Enforced Node Allocatable %s was found, but %s was not provided", SystemReservedAllocatableName, systemReservedCgroupName)))
+		}
+	}
 	return allErrs
 }
 

@@ -2735,6 +2735,98 @@ var _ = Describe("Shoot Validation Tests", func() {
 			)),
 		)
 
+		validReservedPID := int64(100)
+		invalidReservedPID := int64(-100)
+		DescribeTable("validate the kubelet configuration - KubeReserved",
+			func(cpu, memory, epehemeralStorage resource.Quantity, pid *int64, matcher gomegatypes.GomegaMatcher) {
+				kubeletConfig := core.KubeletConfig{
+					KubeReserved: &core.KubeletConfigKubeReserved{
+						CPU:              &cpu,
+						Memory:           &memory,
+						EphemeralStorage: &epehemeralStorage,
+						PID:              pid,
+					},
+				}
+
+				errList := ValidateKubeletConfig(kubeletConfig, nil)
+
+				Expect(errList).To(matcher)
+			},
+
+			Entry("valid configuration", validResourceQuantity, validResourceQuantity, validResourceQuantity, &validReservedPID, HaveLen(0)),
+			Entry("only allow positive resource.Quantity for any value", resource.MustParse(invalidResourceQuantityValue), validResourceQuantity, validResourceQuantity, &validReservedPID, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":  Equal(field.ErrorTypeInvalid),
+				"Field": Equal(field.NewPath("kubeReserved.cpu").String()),
+			})))),
+			Entry("only allow positive reserved pids", validResourceQuantity, validResourceQuantity, validResourceQuantity, &invalidReservedPID, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":  Equal(field.ErrorTypeInvalid),
+				"Field": Equal(field.NewPath("kubeReserved.pid").String()),
+			})))),
+		)
+
+		DescribeTable("validate the kubelet configuration - SystemReserved",
+			func(cpu, memory, epehemeralStorage resource.Quantity, pid *int64, matcher gomegatypes.GomegaMatcher) {
+				kubeletConfig := core.KubeletConfig{
+					SystemReserved: &core.KubeletConfigSystemReserved{
+						CPU:              &cpu,
+						Memory:           &memory,
+						EphemeralStorage: &epehemeralStorage,
+						PID:              pid,
+					},
+				}
+
+				errList := ValidateKubeletConfig(kubeletConfig, nil)
+
+				Expect(errList).To(matcher)
+			},
+
+			Entry("valid configuration", validResourceQuantity, validResourceQuantity, validResourceQuantity, &validReservedPID, HaveLen(0)),
+			Entry("only allow positive resource.Quantity for any value", resource.MustParse(invalidResourceQuantityValue), validResourceQuantity, validResourceQuantity, &validReservedPID, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":  Equal(field.ErrorTypeInvalid),
+				"Field": Equal(field.NewPath("systemReserved.cpu").String()),
+			})))),
+			Entry("only allow positive reserved pids", validResourceQuantity, validResourceQuantity, validResourceQuantity, &invalidReservedPID, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":  Equal(field.ErrorTypeInvalid),
+				"Field": Equal(field.NewPath("systemReserved.pid").String()),
+			})))),
+		)
+
+		kubeReservedCgroupName := "kubeReservedCgroup"
+		systemReservedCgroupName := "systemReservedCgroup"
+		kubeRservedAllocatableName := "kube-reserved"
+		systemReservedAllocatableName := "system-reserved"
+		podsAllocatableName := "pods"
+		DescribeTable("validate the kubelet configuration - EnforceNodAllocatable",
+			func(enforceNodeAllocatable []string, kubeReservedCgroup, systemReservedCgroup *string, matcher gomegatypes.GomegaMatcher) {
+				kubeletConfig := core.KubeletConfig{
+					EnforceNodeAllocatable: enforceNodeAllocatable,
+					KubeReservedCgroup:     kubeReservedCgroup,
+					SystemReservedCgroup:   systemReservedCgroup,
+				}
+
+				errList := ValidateKubeletConfig(kubeletConfig, nil)
+
+				Expect(errList).To(matcher)
+			},
+
+			Entry("valid configuration", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, &systemReservedCgroupName, HaveLen(0)),
+			Entry("kube-reserved should provide cgroup", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, nil, &systemReservedCgroupName, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":     Equal(field.ErrorTypeInvalid),
+				"Field":    Equal(field.NewPath("enforceNodeAllocatable").String()),
+				"BadValue": Equal(kubeRservedAllocatableName),
+			})))),
+			Entry("system-reserved should provide cgroup", []string{podsAllocatableName, kubeRservedAllocatableName, systemReservedAllocatableName}, &kubeReservedCgroupName, nil, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":     Equal(field.ErrorTypeInvalid),
+				"Field":    Equal(field.NewPath("enforceNodeAllocatable").String()),
+				"BadValue": Equal(systemReservedAllocatableName),
+			})))),
+			Entry("system-reserved should provide cgroup", []string{podsAllocatableName, podsAllocatableName}, nil, nil, ConsistOf(PointTo(MatchFields(IgnoreExtras, Fields{
+				"Type":     Equal(field.ErrorTypeInvalid),
+				"Field":    Equal(field.NewPath("enforceNodeAllocatable[1]").String()),
+				"BadValue": Equal(podsAllocatableName),
+			})))),
+		)
+
 		DescribeTable("validate the kubelet configuration - ImagePullProgressDeadline",
 			func(imagePullProgressDeadline metav1.Duration, matcher gomegatypes.GomegaMatcher) {
 				kubeletConfig := core.KubeletConfig{

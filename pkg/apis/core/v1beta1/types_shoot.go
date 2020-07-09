@@ -692,6 +692,26 @@ type KubeletConfig struct {
 	// FailSwapOn makes the Kubelet fail to start if swap is enabled on the node. (default true).
 	// +optional
 	FailSwapOn *bool `json:"failSwapOn,omitempty" protobuf:"varint,13,opt,name=failSwapOn"`
+	// KubeReserved is the configuration for resources reserved for kubernetes node components.
+	// +optional
+	// Default:
+	//   memory:	1Gi
+	//   cpu:		80m
+	KubeReserved *KubeletConfigKubeReserved `json:"kubeReserved,omitempty" protobuf:"bytes,14,opt,name=kubeReserved"`
+	// SystemReserved is the configuration for resources reserved for system components.
+	// +optional
+	SystemReserved *KubeletConfigSystemReserved `json:"systemReserved,omitempty" protobuf:"bytes,15,opt,name=systemReserved"`
+	// EnforceNodeAllocatable is an array of cgroups whose resource would be enforced by kubelet.
+	// +optional
+	// Default:
+	//   - pods
+	EnforceNodeAllocatable []string `json:"enforceNodeAllocatable,omitempty" protobuf:"bytes,16,opt,name=enforceNodeAllocatable"`
+	// KubeReservedCgroup is the name of the cgroup that kubelet will enforce kube-reserved resource on.
+	// +optional
+	KubeReservedCgroup *string `json:"kubeReservedCgroup,omitempty" protobuf:"bytes,17,opt,name=kubeReservedCgroup"`
+	// SystemReservedCgroup is the name of the cgroup that kubelet will enforce system-reserved resource on.
+	// +optional
+	SystemReservedCgroup *string `json:"systemReservedCgroup,omitempty" protobuf:"bytes,18,opt,name=systemReservedCgroup"`
 }
 
 // KubeletConfigEviction contains kubelet eviction thresholds supporting either a resource.Quantity or a percentage based value.
@@ -749,6 +769,38 @@ type KubeletConfigEvictionSoftGracePeriod struct {
 	// NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.
 	// +optional
 	NodeFSInodesFree *metav1.Duration `json:"nodeFSInodesFree,omitempty" protobuf:"bytes,5,opt,name=nodeFSInodesFree"`
+}
+
+// KubeletConfigKubeReserved contains the kube-reserved resources configuration
+type KubeletConfigKubeReserved struct {
+	// CPU is the kube-reserved cpu.
+	// +optional
+	CPU *resource.Quantity `json:"cpu,omitempty" protobuf:"bytes,1,opt,name=cpu"`
+	// Memory is the kube-reserved memory.
+	// +optional
+	Memory *resource.Quantity `json:"memory,omitempty" protobuf:"bytes,2,opt,name=memory"`
+	// EphemeralStorage is the kube-reserved ephemeral-storage.
+	// +optional
+	EphemeralStorage *resource.Quantity `json:"ephemeralStorage,omitempty" protobuf:"bytes,3,opt,name=ephemeralStorage"`
+	// PID is the kube-reserved process-ids.
+	// +optional
+	PID *int64 `json:"pid,omitempty" protobuf:"bytes,4,opt,name=pid"`
+}
+
+// KubeletConfigSystemReserved contains the system-reserved resources configuration
+type KubeletConfigSystemReserved struct {
+	// CPU is the system-reserved cpu.
+	// +optional
+	CPU *resource.Quantity `json:"cpu,omitempty" protobuf:"bytes,1,opt,name=cpu"`
+	// Memory is the system-reserved memory.
+	// +optional
+	Memory *resource.Quantity `json:"memory,omitempty" protobuf:"bytes,2,opt,name=memory"`
+	// EphemeralStorage is the system-reserved ephemeral-storage.
+	// +optional
+	EphemeralStorage *resource.Quantity `json:"ephemeralStorage,omitempty" protobuf:"bytes,3,opt,name=ephemeralStorage"`
+	// PID is the system-reserved process-ids.
+	// +optional
+	PID *int64 `json:"pid,omitempty" protobuf:"bytes,4,opt,name=pid"`
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

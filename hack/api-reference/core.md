@@ -4225,6 +4225,75 @@ bool
 <p>FailSwapOn makes the Kubelet fail to start if swap is enabled on the node. (default true).</p>
 </td>
 </tr>
+<tr>
+<td>
+<code>kubeReserved</code></br>
+<em>
+<a href="#core.gardener.cloud/v1beta1.KubeletConfigKubeReserved">
+KubeletConfigKubeReserved
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>KubeReserved is the configuration for resources reserved for kubernetes node components.
+Default:
+memory:	1Gi
+cpu:		80m</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>systemReserved</code></br>
+<em>
+<a href="#core.gardener.cloud/v1beta1.KubeletConfigSystemReserved">
+KubeletConfigSystemReserved
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>SystemReserved is the configuration for resources reserved for system components.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>enforceNodeAllocatable</code></br>
+<em>
+[]string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>EnforceNodeAllocatable is an array of cgroups whose resource would be enforced by kubelet.
+Default:
+- pods</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>kubeReservedCgroup</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>KubeReservedCgroup is the name of the cgroup that kubelet will enforce kube-reserved resource on.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>systemReservedCgroup</code></br>
+<em>
+string
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>SystemReservedCgroup is the name of the cgroup that kubelet will enforce system-reserved resource on.</p>
+</td>
+</tr>
 </tbody>
 </table>
 <h3 id="core.gardener.cloud/v1beta1.KubeletConfigEviction">KubeletConfigEviction
@@ -4480,6 +4549,152 @@ Kubernetes meta/v1.Duration
 <td>
 <em>(Optional)</em>
 <p>NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="core.gardener.cloud/v1beta1.KubeletConfigKubeReserved">KubeletConfigKubeReserved
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#core.gardener.cloud/v1beta1.KubeletConfig">KubeletConfig</a>)
+</p>
+<p>
+<p>KubeletConfigKubeReserved contains the kube-reserved resources configuration</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>cpu</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CPU is the kube-reserved cpu.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>memory</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Memory is the kube-reserved memory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>ephemeralStorage</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>EphemeralStorage is the kube-reserved ephemeral-storage.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>pid</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PID is the kube-reserved process-ids.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3 id="core.gardener.cloud/v1beta1.KubeletConfigSystemReserved">KubeletConfigSystemReserved
+</h3>
+<p>
+(<em>Appears on:</em>
+<a href="#core.gardener.cloud/v1beta1.KubeletConfig">KubeletConfig</a>)
+</p>
+<p>
+<p>KubeletConfigSystemReserved contains the system-reserved resources configuration</p>
+</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<code>cpu</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>CPU is the system-reserved cpu.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>memory</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>Memory is the system-reserved memory.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>ephemeralStorage</code></br>
+<em>
+<a href="https://godoc.org/k8s.io/apimachinery/pkg/api/resource#Quantity">
+k8s.io/apimachinery/pkg/api/resource.Quantity
+</a>
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>EphemeralStorage is the system-reserved ephemeral-storage.</p>
+</td>
+</tr>
+<tr>
+<td>
+<code>pid</code></br>
+<em>
+int64
+</em>
+</td>
+<td>
+<em>(Optional)</em>
+<p>PID is the system-reserved process-ids.</p>
 </td>
 </tr>
 </tbody>
