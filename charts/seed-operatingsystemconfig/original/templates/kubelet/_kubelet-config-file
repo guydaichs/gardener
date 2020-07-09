@@ -28,7 +28,7 @@ enableControllerAttachDetach: true
 enableDebuggingHandlers: true
 enableServer: true
 enforceNodeAllocatable:
-- pods
+{{ toYaml .Values.worker.kubelet.enforceNodeAllocatable}}
 eventRecordQPS: 50
 eventBurst: 50
 evictionHard:
@@ -68,9 +68,24 @@ imageGCHighThresholdPercent: 50
 imageGCLowThresholdPercent: 40
 kubeAPIBurst: 50
 kubeAPIQPS: 50
+{{- if .Values.worker.kubelet.kubeReserved }}
 kubeReserved:
-  cpu: 80m
-  memory: 1Gi
+{{- range $key, $value := .Values.worker.kubelet.kubeReserved }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.worker.kubelet.systemReserved }}
+systemReserved:
+{{- range $key, $value := .Values.worker.kubelet.systemReserved }}
+  {{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- if .Values.worker.kubelet.kubeReservedCgroup }}
+kubeReservedCgroup: {{ .Values.worker.kubelet.kubeReservedCgroup }}
+{{- end }}
+{{- if .Values.worker.kubelet.systemReservedCgroup }}
+systemReservedCgroup: {{ .Values.worker.kubelet.systemReservedCgroup }}
+{{- end }}
 hairpinMode: promiscuous-bridge
 {{- if semverCompare "< 1.15" .Values.kubernetes.version }}
 hostNetworkSources:

@@ -102,6 +102,22 @@ spec:
     #       nodeFSInodesFree: 0Mi
     #     featureGates:
     #       SomeKubernetesFeature: true
+    #     enforceNodeAllocatable:
+    #       - pods
+    #       - kube-reserved
+    #       - system-reserved
+    #     kubeReservedCgroup: runtime.slice
+    #     kubeReserved:
+    #       cpu: 100m
+    #       memory: 1Gi
+    #       ephemeralStorage: 1Gi
+    #       pid: 1000
+    #     systemReservedCgroup: system.slice
+    #     systemReserved:
+    #       cpu: 100m
+    #       memory: 1Gi
+    #       ephemeralStorage: 1Gi
+    #       pid: 1000
     # zones: # optional, only relevant if the provider supports availability zones
     # - europe-central-1a
     # - europe-central-1b

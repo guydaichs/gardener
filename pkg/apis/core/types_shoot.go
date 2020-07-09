@@ -556,6 +556,21 @@ type KubeletConfig struct {
 	ImagePullProgressDeadline *metav1.Duration
 	// FailSwapOn makes the Kubelet fail to start if swap is enabled on the node. (default true).
 	FailSwapOn *bool
+	// KubeReserved is the configuration for resources reserved for kubernetes node components.
+	// Default:
+	//   memory:	1Gi
+	//   cpu:		80m
+	KubeReserved *KubeletConfigKubeReserved
+	// SystemReserved is the configuration for resources reserved for system components.
+	SystemReserved *KubeletConfigSystemReserved
+	// EnforceNodeAllocatable is an array of cgroups whose resource would be enforced by kubelet.
+	// Default:
+	//   - pods
+	EnforceNodeAllocatable []string
+	// KubeReservedCgroup is the name of the cgroup that kubelet will enforce kube-reserved resource on.
+	KubeReservedCgroup *string
+	// SystemReservedCgroup is the name of the cgroup that kubelet will enforce system-reserved resource on.
+	SystemReservedCgroup *string
 }
 
 // KubeletConfigEviction contains kubelet eviction thresholds supporting either a resource.Quantity or a percentage based value.
@@ -598,6 +613,30 @@ type KubeletConfigEvictionSoftGracePeriod struct {
 	NodeFSAvailable *metav1.Duration
 	// NodeFSInodesFree is the grace period for the NodeFSInodesFree eviction threshold.
 	NodeFSInodesFree *metav1.Duration
+}
+
+// KubeletConfigKubeReserved contains the kube-reserved resources configuration
+type KubeletConfigKubeReserved struct {
+	// CPU is the kube-reserved cpu.
+	CPU *resource.Quantity
+	// Memory is the kube-reserved memory.
+	Memory *resource.Quantity
+	// EphemeralStorage is the kube-reserved ephemeral-storage.
+	EphemeralStorage *resource.Quantity
+	// PID is the kube-reserved process-ids.
+	PID *int64
+}
+
+// KubeletConfigSystemReserved contains the system-reserved resources configuration
+type KubeletConfigSystemReserved struct {
+	// CPU is the system-reserved cpu.
+	CPU *resource.Quantity
+	// Memory is the system-reserved memory.
+	Memory *resource.Quantity
+	// EphemeralStorage is the system-reserved ephemeral-storage.
+	EphemeralStorage *resource.Quantity
+	// PID is the system-reserved process-ids.
+	PID *int64
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////

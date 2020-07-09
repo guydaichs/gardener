@@ -18,6 +18,7 @@ import (
 	"context"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"sync"
 	"time"
 
@@ -190,6 +191,8 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		evictionSoft            = map[string]string{}
 		evictionSoftGracePeriod = map[string]string{}
 		evictionMinimumReclaim  = map[string]string{}
+		kubeReserved            = map[string]string{}
+		systemReserved          = map[string]string{}
 	)
 
 	// use the spec.Kubernetes.Kubelet as default for worker
@@ -277,6 +280,38 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 				evictionMinimumReclaim["nodeFSInodesFree"] = nodeFSInodesFree.String()
 			}
 		}
+
+		if kubeletConfig.KubeReserved != nil {
+			reserved := kubeletConfig.KubeReserved
+			if cpu := reserved.CPU; cpu != nil {
+				kubeReserved["cpu"] = cpu.String()
+			}
+			if memory := reserved.Memory; memory != nil {
+				kubeReserved["memory"] = memory.String()
+			}
+			if ephemeralStorage := reserved.EphemeralStorage; ephemeralStorage != nil {
+				kubeReserved["ephemeral-storage"] = ephemeralStorage.String()
+			}
+			if pid := reserved.PID; pid != nil {
+				kubeReserved["pid"] = strconv.FormatInt(*reserved.PID, 10)
+			}
+		}
+
+		if kubeletConfig.SystemReserved != nil {
+			reserved := kubeletConfig.SystemReserved
+			if cpu := reserved.CPU; cpu != nil {
+				systemReserved["cpu"] = cpu.String()
+			}
+			if memory := reserved.Memory; memory != nil {
+				systemReserved["memory"] = memory.String()
+			}
+			if ephemeralStorage := reserved.EphemeralStorage; ephemeralStorage != nil {
+				systemReserved["ephemeral-storage"] = ephemeralStorage.String()
+			}
+			if pid := reserved.PID; pid != nil {
+				systemReserved["pid"] = strconv.FormatInt(*reserved.PID, 10)
+			}
+		}
 	}
 
 	var kubelet = map[string]interface{}{
@@ -285,6 +320,8 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		"evictionSoft":            evictionSoft,
 		"evictionSoftGracePeriod": evictionSoftGracePeriod,
 		"evictionMinimumReclaim":  evictionMinimumReclaim,
+		"kubeReserved":            kubeReserved,
+		"systemReserved":          systemReserved,
 	}
 
 	if kubeletConfig := kubeletConfig; kubeletConfig != nil {
@@ -314,6 +351,15 @@ func (b *Botanist) deployOperatingSystemConfigsForWorker(ctx context.Context, ma
 		}
 		if failSwapOn := kubeletConfig.FailSwapOn; failSwapOn != nil {
 			kubelet["failSwapOn"] = *failSwapOn
+		}
+		if enforceNodeAllocatable := kubeletConfig.EnforceNodeAllocatable; enforceNodeAllocatable != nil {
+			kubelet["enforceNodeAllocatable"] = enforceNodeAllocatable
+		}
+		if kubeReservedCgroup := kubeletConfig.KubeReservedCgroup; kubeReservedCgroup != nil {
+			kubelet["kubeReservedCgroup"] = kubeReservedCgroup
+		}
+		if systemReservedCgroup := kubeletConfig.SystemReservedCgroup; systemReservedCgroup != nil {
+			kubelet["systemReservedCgroup"] = systemReservedCgroup
 		}
 	}
 
