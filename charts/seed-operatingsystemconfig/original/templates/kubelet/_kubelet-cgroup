@@ -1,0 +1,12 @@
+{{- define "kubelet-cgroup" -}}
+- path: /etc/systemd/system/kubelet.service.d/10-cgroup.conf
+  permissions: 0644
+  content:
+    inline:
+      encoding: ""
+      data: |
+        [Service]
+        CPUAccounting=true
+        MemoryAccounting=true
+        Slice=podruntime.slice
+{{- end -}}

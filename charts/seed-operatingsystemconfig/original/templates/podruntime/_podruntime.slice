@@ -1,0 +1,15 @@
+{{- define "podruntime" -}}
+- name: podruntime.slice
+  path: /etc/systemd/system/podruntime.slice
+  command: start
+  enable: true
+  content: |
+    [Unit]
+    Description=Slice for Kubelet and Container runtime
+    Documentation=https://github.com/kubernetes/community/blob/master/contributors/design-proposals/node/node-allocatable.md#recommended-cgroups-setup
+    DefaultDependencies=no
+    Before=slices.target
+    Requires=-.slice
+    After=-.slice
+    AllowedCPUsAllowedCPUs=0-1
+{{- end -}}

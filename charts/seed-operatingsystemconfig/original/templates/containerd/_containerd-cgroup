@@ -1,0 +1,10 @@
+{{- define "containerd-cgroup" -}}
+- path: /etc/systemd/system/containerd.service.d/10-cgroup.conf
+  permissions: 0644
+  content:
+    inline:
+      encoding: ""
+      data: |
+        [Service]
+        Slice=podruntime.slice
+{{- end -}}
